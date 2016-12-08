@@ -74,6 +74,9 @@ public class EnemyAI : MonoBehaviour {
 					
 		} else
 			patrolTimer = 0f;
-		nav.destination = patrolWayPoints [wayPointIndex].position;
+		nav.updatePosition = true;
+		nav.SetDestination(patrolWayPoints [wayPointIndex].position);
+//		nav.enabled = true;
+//		nav.destination = patrolWayPoints [wayPointIndex].position;
 	}
 }
