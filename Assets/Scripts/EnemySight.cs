@@ -16,7 +16,7 @@ public class EnemySight : MonoBehaviour {
 	private HashIDs hash;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		nav = GetComponent<NavMeshAgent> ();
 		col = GetComponent<SphereCollider> ();
 		anim = GetComponent<Animator> ();
@@ -38,23 +38,28 @@ public class EnemySight : MonoBehaviour {
 			personalLastSighting = lastPlayerSighting.position;
 		
 		previousSighting = lastPlayerSighting.position;
+		// Debug raycast
+		Vector3 forward = player.transform.position - transform.position;
+		Debug.DrawRay(transform.position + transform.up * 0.5f , forward.normalized ,  Color.cyan);
 	
 	}
 
-	void onTriggerStay(Collider other){
+	void OnTriggerStay(Collider other){
 		if (other.gameObject == player) {
 			playerInSight = false;
 			// if player in field of vision of enemy 
 			Vector3 direction = other.transform.position - transform.position;
 			float angle = Vector3.Angle (direction, transform.forward);
 
-			if (angle < fieldOfViewAngle * 0.5f) {
-				// check if no obstacle between enemy and player, raycast is moved up so it won't collide with floor 
+			if (angle < fieldOfViewAngle ) {
+				// check if no obstacle between enemy and player
+				//raycast is moved up so it won't collide with floor 
 				RaycastHit hit;
-				if (Physics.Raycast (transform.position + transform.up, direction.normalized, out hit, col.radius)) {
+				if (Physics.Raycast (transform.position + transform.up * 0.5f  , direction.normalized, out hit, col.radius)) {
 					if (hit.collider.gameObject == player) {
-						playerInSight = true;
-						lastPlayerSighting.position = player.transform.position;
+						print ("######### playerInSight #########");
+						//playerInSight = true;
+						//lastPlayerSighting.position = player.transform.position;
 					}
 				}
 
@@ -64,7 +69,8 @@ public class EnemySight : MonoBehaviour {
 			int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
 			int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(1).nameHash;
 
-			if(playerLayerZeroStateHash == hash.locomotionState || playerLayerOneStateHash == hash.shoutState ){
+			if(playerLayerZeroStateHash == hash.locomotionState && playerLayerOneStateHash == hash.shoutState ){
+				print ("######### Sound made #########");
 				if (calculatePathLength (player.transform.position) <= col.radius) {
 					personalLastSighting = player.transform.position;
 				}
@@ -73,10 +79,10 @@ public class EnemySight : MonoBehaviour {
 			
 	}
 
-	void onTriggerExit(Collider other){
+	/*void onTriggerExit(Collider other){
 		if (other.gameObject == player)
 			playerInSight = false;
-	}
+	}*/
 
 	// calculate path to player 
 	float calculatePathLength(Vector3 targetPosition){
