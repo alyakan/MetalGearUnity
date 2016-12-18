@@ -39,8 +39,8 @@ public class EnemySight : MonoBehaviour {
 		
 		previousSighting = lastPlayerSighting.position;
 		// Debug raycast
-		Vector3 forward = player.transform.position - transform.position;
-		Debug.DrawRay(transform.position + transform.up * 0.5f , forward.normalized ,  Color.cyan);
+		//Vector3 forward = player.transform.position - transform.position;
+		//Debug.DrawRay(transform.position + transform.up * 0.5f , forward.normalized ,  Color.cyan);
 	
 	}
 
@@ -52,8 +52,7 @@ public class EnemySight : MonoBehaviour {
 			float angle = Vector3.Angle (direction, transform.forward);
 
 			if (angle < fieldOfViewAngle ) {
-				// check if no obstacle between enemy and player
-				//raycast is moved up so it won't collide with floor 
+				// check if no obstacle between enemy and player, raycast is moved up so it won't collide with floor 
 				RaycastHit hit;
 				if (Physics.Raycast (transform.position + transform.up * 0.5f  , direction.normalized, out hit, col.radius)) {
 					if (hit.collider.gameObject == player) {
@@ -69,7 +68,7 @@ public class EnemySight : MonoBehaviour {
 			int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
 			int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(1).nameHash;
 
-			if(playerLayerZeroStateHash == hash.locomotionState && playerLayerOneStateHash == hash.shoutState ){
+			if(playerLayerOneStateHash == hash.shoutState ){
 				print ("######### Sound made #########");
 				if (calculatePathLength (player.transform.position) <= col.radius) {
 					personalLastSighting = player.transform.position;
@@ -78,12 +77,7 @@ public class EnemySight : MonoBehaviour {
 		}
 			
 	}
-
-	/*void onTriggerExit(Collider other){
-		if (other.gameObject == player)
-			playerInSight = false;
-	}*/
-
+		
 	// calculate path to player 
 	float calculatePathLength(Vector3 targetPosition){
 		NavMeshPath path = new NavMeshPath ();
@@ -91,8 +85,9 @@ public class EnemySight : MonoBehaviour {
 			nav.CalculatePath (targetPosition, path);
 
 		Vector3[] allwaypoints = new Vector3[path.corners.Length + 2];
+
 		allwaypoints [0] = transform.position;
-		allwaypoints [allwaypoints.Length + 1] = targetPosition;
+		allwaypoints [allwaypoints.Length - 1] = targetPosition;
 
 		// get different points of path for late calculation of distance 
 		for (int i = 0; i < path.corners.Length; i++) {
