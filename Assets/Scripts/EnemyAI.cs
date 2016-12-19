@@ -62,7 +62,7 @@ public class EnemyAI : MonoBehaviour {
 		nav.speed = patrolSpeed;
 		// check if enemy has no position, or reached one of the position
 		if (nav.destination == lastPlayerSighting.resetPosition || nav.remainingDistance < nav.stoppingDistance) {
-			patrolTimer += Time.deltaTime;
+			patrolTimer += (Time.deltaTime * 2);
 
 			if (patrolTimer >= patrolWaitTime) {
 				if (wayPointIndex == patrolWayPoints.Length - 1)
@@ -76,7 +76,5 @@ public class EnemyAI : MonoBehaviour {
 			patrolTimer = 0f;
 		nav.updatePosition = true;
 		nav.SetDestination(patrolWayPoints [wayPointIndex].position);
-//		nav.enabled = true;
-//		nav.destination = patrolWayPoints [wayPointIndex].position;
 	}
 }
