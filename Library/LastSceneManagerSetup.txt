@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scene.unity
+- path: C:/Users/kareem/Desktop/Advanced_Lab_Proj_3/Level 2/Assets/Scenes/Level2.unity
   isLoaded: 1
   isActive: 1
