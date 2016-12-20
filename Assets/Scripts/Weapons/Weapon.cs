@@ -139,7 +139,7 @@ public class Weapon : MonoBehaviour
 
     //This fires the weapon
     public void Fire(Ray ray)
-	{	print ("### weapon fired ###");
+	{
 		playerAnim.SetBool (hash.firingBool, true);
 		if (ammo.clipAmmo <= 0 || resettingCartridge || !weaponSettings.bulletSpawn || !equipped)
             return;

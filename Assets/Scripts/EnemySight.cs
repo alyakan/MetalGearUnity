@@ -14,6 +14,10 @@ public class EnemySight : MonoBehaviour {
 	private Vector3 previousSighting;
 	private LastPlayerSighting lastPlayerSighting;
 	private HashIDs hash;
+	// vision collider
+	private GameObject visionCollider;
+	private SphereCollider childSphereCollider;
+
 
 	// Use this for initialization
 	void Awake () {
@@ -27,6 +31,9 @@ public class EnemySight : MonoBehaviour {
 
 		personalLastSighting = lastPlayerSighting.resetPosition;
 		previousSighting = lastPlayerSighting.resetPosition;
+
+		visionCollider = this.gameObject.transform.GetChild (2).gameObject;
+		childSphereCollider = visionCollider.GetComponent<SphereCollider> ();
 
 
 
@@ -46,6 +53,7 @@ public class EnemySight : MonoBehaviour {
 
 	void OnTriggerStay(Collider other){
 		if (other.gameObject == player) {
+			//print ("######### OnTriggerStay #########");
 			playerInSight = false;
 			// if player in field of vision of enemy 
 			Vector3 direction = other.transform.position - transform.position;
@@ -54,7 +62,7 @@ public class EnemySight : MonoBehaviour {
 			if (angle < fieldOfViewAngle ) {
 				// check if no obstacle between enemy and player, raycast is moved up so it won't collide with floor 
 				RaycastHit hit;
-				if (Physics.Raycast (transform.position + transform.up * 0.5f  , direction.normalized, out hit, col.radius)) {
+				if (Physics.Raycast (transform.position + transform.up * 0.5f  , direction.normalized, out hit, childSphereCollider.radius)) {
 					if (hit.collider.gameObject == player) {
 						print ("######### playerInSight #########");
 						//playerInSight = true;
@@ -67,16 +75,18 @@ public class EnemySight : MonoBehaviour {
 			// if player is heard shouting, check distance to player position
 			// int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
 			int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(2).nameHash;
+			bool shotFired = playerAnim.GetBool(hash.firingBool);
 		
 			if(playerLayerOneStateHash == hash.shoutState ){
-				print ("######### Sound made #########");
+				print ("######### sound heard #########");
 				if (calculatePathLength (player.transform.position) <= col.radius) {
 					personalLastSighting = player.transform.position;
 				}
 			}
 			// if player heard firing
-			bool shotFired = playerAnim.GetBool(hash.firingBool);
+
 			if (shotFired) {
+				print ("### weapon fired ###");
 				personalLastSighting = player.transform.position;
 			}
 		}
