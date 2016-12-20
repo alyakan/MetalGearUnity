@@ -88,6 +88,10 @@ public class Weapon : MonoBehaviour
 	}
 	[SerializeField]
 	public SoundSettings sounds;
+	private HashIDs hash;
+	private GameObject player;
+	private Animator playerAnim;
+
 
     // Use this for initialization
     void Start()
@@ -101,6 +105,10 @@ public class Weapon : MonoBehaviour
         col = GetComponent<Collider>();
         rigidBody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+		//set weapon to fired
+		hash = GameObject.FindGameObjectWithTag (Tags.gameController).GetComponent<HashIDs> ();
+		player = GameObject.FindGameObjectWithTag (Tags.player);
+		playerAnim = player.GetComponent<Animator> ();
 
     }
 
@@ -131,7 +139,8 @@ public class Weapon : MonoBehaviour
 
     //This fires the weapon
     public void Fire(Ray ray)
-    {
+	{	print ("### weapon fired ###");
+		playerAnim.SetBool (hash.firingBool, true);
 		if (ammo.clipAmmo <= 0 || resettingCartridge || !weaponSettings.bulletSpawn || !equipped)
             return;
 

@@ -81,9 +81,7 @@ public class CharacterMovement : MonoBehaviour
         ApplyGravity();
 		// shout
 		bool shout = Input.GetButton ("Attract");
-		if(shout)
-			print (shout +"############");
-		animator.SetBool ("Shouting", shout);
+		animator.SetBool (hash.shoutingBool, shout);
         //isGrounded = characterController.isGrounded;
     }
 

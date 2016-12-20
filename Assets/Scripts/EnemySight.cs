@@ -64,15 +64,20 @@ public class EnemySight : MonoBehaviour {
 
 			}
 
-			// if player is heard, check distance to player position
-			int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
-			int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(1).nameHash;
-
+			// if player is heard shouting, check distance to player position
+			// int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
+			int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(2).nameHash;
+		
 			if(playerLayerOneStateHash == hash.shoutState ){
 				print ("######### Sound made #########");
 				if (calculatePathLength (player.transform.position) <= col.radius) {
 					personalLastSighting = player.transform.position;
 				}
+			}
+			// if player heard firing
+			bool shotFired = playerAnim.GetBool(hash.firingBool);
+			if (shotFired) {
+				personalLastSighting = player.transform.position;
 			}
 		}
 			
