@@ -45,9 +45,12 @@ public class EnemySight : MonoBehaviour {
 			personalLastSighting = lastPlayerSighting.position;
 		
 		previousSighting = lastPlayerSighting.position;
-		// Debug raycast
-		//Vector3 forward = player.transform.position - transform.position;
-		//Debug.DrawRay(transform.position + transform.up * 0.5f , forward.normalized ,  Color.cyan);
+		// if player heard firing
+		if (playerAnim.GetBool(hash.firingBool)) {
+			print ("### weapon fired ###");
+			personalLastSighting = player.transform.position;
+			playerAnim.SetBool (hash.firingBool, false);
+		}
 	
 	}
 
@@ -75,20 +78,13 @@ public class EnemySight : MonoBehaviour {
 			// if player is heard shouting, check distance to player position
 			// int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
 			int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(2).nameHash;
-			bool shotFired = playerAnim.GetBool(hash.firingBool);
-		
 			if(playerLayerOneStateHash == hash.shoutState ){
 				print ("######### sound heard #########");
 				if (calculatePathLength (player.transform.position) <= col.radius) {
 					personalLastSighting = player.transform.position;
 				}
 			}
-			// if player heard firing
 
-			if (shotFired) {
-				print ("### weapon fired ###");
-				personalLastSighting = player.transform.position;
-			}
 		}
 			
 	}
