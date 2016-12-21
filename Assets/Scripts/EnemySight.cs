@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class EnemySight : MonoBehaviour {
 	public float fieldOfViewAngle = 110f;
@@ -17,6 +18,7 @@ public class EnemySight : MonoBehaviour {
 	// vision collider
 	private GameObject visionCollider;
 	private SphereCollider childSphereCollider;
+	private GameObject gameOverMenu;
 
 
 	// Use this for initialization
@@ -35,7 +37,7 @@ public class EnemySight : MonoBehaviour {
 		visionCollider = this.gameObject.transform.GetChild (2).gameObject;
 		childSphereCollider = visionCollider.GetComponent<SphereCollider> ();
 
-
+		gameOverMenu = GameObject.FindGameObjectWithTag (Tags.gameOverMenu);
 
 	}
 	
@@ -68,6 +70,8 @@ public class EnemySight : MonoBehaviour {
 				if (Physics.Raycast (transform.position + transform.up * 0.5f  , direction.normalized, out hit, childSphereCollider.radius)) {
 					if (hit.collider.gameObject == player) {
 						print ("######### playerInSight #########");
+						gameOverMenu.transform.Translate (new Vector3(gameOverMenu.transform.position.x - 15, gameOverMenu.transform.position.y, gameOverMenu.transform.position.z));
+
 						//playerInSight = true;
 						//lastPlayerSighting.position = player.transform.position;
 					}

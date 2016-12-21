@@ -27,7 +27,7 @@ public class KeyPickup : MonoBehaviour {
 			Destroy (gameObject);
 			// open door
 			doorSpotLight.color = Color.green;
-			Destroy (door);
+//			Destroy (door);
 			
 		}
 	
